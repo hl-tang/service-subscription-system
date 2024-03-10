@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <p>我是home</p>
+  <p class="text-3xl font-bold underline">我是home</p>
 </template>
 
 <style scoped>
