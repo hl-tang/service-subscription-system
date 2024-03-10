@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <router-view />
+  <p>我是home</p>
 </template>
 
 <style scoped>
