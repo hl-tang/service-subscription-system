@@ -46,13 +46,17 @@ pages下创个Play.vue，配好router，随便在里面尝试 (最后.gitignore�
 
 ## Tailwind CSS
 
+参考 https://tailwindcss.com/docs/guides/vite#vue
+
+```
+pnpm add -D tailwindcss postcss autoprefixer
+```
+
 
 
 ## Vuetify
 
-
-
-
-
-
+```
+pnpm i vuetify
+```
 
