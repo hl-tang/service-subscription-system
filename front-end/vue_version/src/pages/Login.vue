@@ -1,23 +1,67 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-200">
-    <div class="bg-white p-8 rounded-lg shadow-lg max-w-xl w-full">
-      <h2 class="text-2xl font-semibold mb-6">用户登录</h2>
-      <form @submit.prevent="login">
-        <div class="mb-4">
-          <label for="username" class="block text-gray-700 font-medium">用户名</label>
-          <input v-model="username" type="text" id="username" name="username" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
-        </div>
-        <div class="mb-4">
-          <label for="password" class="block text-gray-700 font-medium">密码</label>
-          <input v-model="password" type="password" id="password" name="password" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
-        </div>
-        <button type="submit" class="bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-dark focus:outline-none focus:ring focus:ring-primary focus:ring-opacity-50 block mx-auto">登录</button>
-      </form>
+  <!-- top bar -->
+  <div id="TopBar" class="fixed bg-gray-100 w-full border-b h-[60px] flex items-center z-10">
+    <router-link to="/" class="ml-2">
+      <KeyboardBackspaceIcon :size="35" fillColor="#636363" />
+    </router-link>
+
+    <div class="flex-1 text-center text-white"> <!-- flex-1类会使该 div 元素扩展以填充剩余的可用空间，从而将其余内容推到顶部栏的右侧 -->
+
+      <span class="text-teal-500 text-xl">ログイン</span>
     </div>
   </div>
+
+  <!-- topbar下面的东西，为了不被topbar遮住，块内设置与topbar高度相同的上边距-->
+  <div class="min-h-[620px] bg-green-50 pt-[60px]"> <!-- 不使用min-h-screen，屏幕下面显示 用户注册 -->
+    <div class="mt-10 grid justify-items-center"> <!-- 注意grid justify-items-center, flex这里没用的, text-center也不需要了 -->
+      <p class="text-2xl font-thin text-teal-500">会員登録がお済みのお客様</p> <!-- 不知道怎么精细地调日语字体 -->
+      <p class="mt-5 max-w-[550px]">登録時に入力されたログインIDとパスワードをご入力の上、「ログイン」ボタンをクリックしてください。 </p> <!-- 不知道怎么精细地调日语字体 -->
+    </div>
+
+    <!-- 登录框 -->
+    <div class="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
+      <h2 class="text-2xl font-semibold mb-4">用户名密码登录</h2>
+      <form>
+        <div class="mb-4">
+          <label for="username" class="block text-sm font-medium text-gray-700">用户名</label>
+          <input type="text" id="username" name="username"
+            class="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
+        </div>
+        <div class="mb-6">
+          <label for="password" class="block text-sm font-medium text-gray-700">密码</label>
+          <input type="password" id="password" name="password"
+            class="mt-1 p-2 block w-full rounded-md border-gray-300 focus:border-teal-500 focus:ring focus:ring-teal-500 focus:ring-opacity-50">
+        </div>
+        <div>
+          <button type="submit"
+            class="w-full bg-teal-500 text-white font-bold py-2 px-4 rounded hover:bg-teal-600 focus:outline-none focus:ring focus:ring-teal-500 focus:ring-opacity-50">登录</button>
+        </div>
+      </form>
+    </div>
+
+
+
+  </div>
+
+  <!-- 新規ユーザ注册 -->
+  <div class="bg-white min-h-[320px] p-6 flex flex-col items-center">
+    <p class="text-2xl font-thin text-teal-500 mt-3">会員登録がお済みでないお客様</p>
+    <p class="mt-5">まだ会員登録をされていないお客様は、新規で会員登録をし、お申込みください。</p>
+    <button class="bg-emerald-300 hover:bg-slate-200 text-white py-2 px-10 rounded-full mt-3">
+      新規会員登録する
+    </button>
+  </div>
+
+
+
+
+
 </template>
 
 <script setup>
+import KeyboardBackspaceIcon from 'vue-material-design-icons/KeyboardBackspace.vue';
+
+
 import { ref } from 'vue';
 
 const username = ref('');
@@ -30,6 +74,8 @@ const login = () => {
   console.log('密码:', password.value);
   // 这里可以添加更多的登录逻辑，比如使用axios向后端发送请求验证用户身份
 }
+
+
 </script>
 
 <style>
