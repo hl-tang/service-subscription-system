@@ -11,6 +11,9 @@ dependencies:
   vue:
     specifier: ^3.4.19
     version: 3.4.21
+  vue-cookies:
+    specifier: ^1.8.3
+    version: 1.8.3
   vue-material-design-icons:
     specifier: ^5.3.0
     version: 5.3.0
@@ -1369,6 +1372,10 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
+
+  /vue-cookies@1.8.3:
+    resolution: {integrity: sha512-VBRsyRMVdahBgFfh389TMHPmDdr4URDJNMk4FKSCfuNITs7+jitBDhwyL4RJd3WUsfOYNNjPAkfbehyH9AFuoA==}
+    dev: false
 
   /vue-material-design-icons@5.3.0:
     resolution: {integrity: sha512-wnbRh+48RwX/Gt+iqwCSdWpm0hPBwwv9F7MSouUzZ2PsphYVMJB9KkG9iGs+tgBiT57ZiurFEK07Y/rFKx+Ekg==}

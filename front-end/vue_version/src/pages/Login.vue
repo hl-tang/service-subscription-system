@@ -64,6 +64,7 @@
         </div>
       </form>
 
+      <p>{{ res_data.message }}</p>
 
     </div>
 
@@ -97,24 +98,32 @@ import { ref } from 'vue';
 const username = ref('');
 const password = ref('');
 
-/* const login = () => {
-  // 在这里实现登录逻辑，可以向后端发送请求验证用户名和密码
-  console.log('登录中...');
-  console.log('用户名:', username.value);
-  console.log('密码:', password.value);
-  // 这里可以添加更多的登录逻辑，比如使用axios向后端发送请求验证用户身份
-} */
+const res_data = ref({});
+import { useRoute, useRouter } from "vue-router"
+const route = useRoute()
+const router = useRouter()
 
 const login = async () => {
   console.log('登录中...');
   console.log('用户名:', username.value);
-  console.log('密码:', password.value);
+  // console.log('密码:', password.value);
   try {
-    await axios.post("http://localhost:8000/api/login/", {
+    await axios.post("http://localhost:8000/api/auth_login/", {
       username: username.value,
       password: password.value,
+    }).then(res => {
+      console.log("Response Data:", res.data);
+      // res_data = res.data  一定注意.value
+      res_data.value = res.data
+      console.log(res_data.value.message)
+      if (res_data.value.message === "Login successful") {
+        // router.push("/login")
+        // 等待2秒后执行跳转页面的操作
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
+      }
     });
-    console.log('Login successful');
   } catch (error) {
     console.error(error.response.data.message);
   }

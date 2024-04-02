@@ -33,6 +33,8 @@
           </button>
         </div>
       </form>
+
+      <p>{{ res_data.message }}</p>
     </div>
   </div>
 </template>
@@ -40,9 +42,16 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
+import { routerKey } from 'vue-router';
 const username = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+
+const res_data = ref({});
+
+import { useRoute, useRouter } from "vue-router"
+const route = useRoute()
+const router = useRouter()
 
 const register = async () => {
   if (password.value !== confirmPassword.value) {
@@ -52,10 +61,23 @@ const register = async () => {
 
   try {
     await axios.post("http://localhost:8000/api/register/", {
+      // request body json的key别忘了"""包む, 但好像没用"username"也对了
       username: username.value,
       password: password.value,
+    }).then(res => {
+      console.log("Response Data:", res.data);
+      // res_data = res.data  一定注意.value
+      res_data.value = res.data
+      console.log(res_data.value.message)
+      if (res_data.value.message === "User created successfully") {
+        // router.push("/login")
+        // 等待2秒后执行跳转页面的操作
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+      }
     });
-    console.log('Registration successful');
+    // console.log('Registration successful');
   } catch (error) {
     console.error(error.response.data.message);
   }
