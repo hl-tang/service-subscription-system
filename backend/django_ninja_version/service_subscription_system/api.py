@@ -1,4 +1,4 @@
-from ninja import NinjaAPI
+from ninja import NinjaAPI, Schema
 from django.contrib.auth.decorators import login_required, permission_required
 
 api = NinjaAPI()
@@ -7,14 +7,20 @@ api = NinjaAPI()
 def hello_world(request):
     return {"hello": "world"}
 
-@api.get("welcome/")
+class Message(Schema):
+    msg: str
+
+class WelcomeOut(Schema):
+    hello: str
+
+@api.get("welcome/", response={200: WelcomeOut, 401: Message})
 def welcome(request):
     print(request.user)
     print(request.session.items())
     if request.user.is_authenticated:
-        return {"hello": request.user.username}
+        return 200, {"hello": request.user.username}
     else:
-        return {"msg": "please login"}
+        return 401, {"msg": "please login"}
 
 # 好像没登录也可以得到return的返回
 @login_required(login_url="/api/login/")

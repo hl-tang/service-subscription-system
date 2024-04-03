@@ -3,6 +3,9 @@ import "./style.css";
 import App from "./App.vue";
 import router from "./router";
 import VueCookies from "vue-cookies";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
 
 // Vuetify
 import "vuetify/styles";

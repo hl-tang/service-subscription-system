@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from ninja import NinjaAPI, Router
 from ninja import Form, Query
+from django.http import HttpRequest, HttpResponse
 from django.core.exceptions import ValidationError
 import hashlib  # 导入哈希库
 
@@ -25,7 +26,7 @@ def auth_register(request, payload: RegisterIn):
 
 @user_login_api.post("/auth_login/")
 # def auth_login(request, username: str, password: str): #这种写法带query parameter, url为login/?username=string&password=string
-def auth_login(request, payload: LoginIn): #这样用payload参数代表request body   url为login/
+def auth_login(request: HttpRequest, response: HttpResponse, payload: LoginIn): #这样用payload参数代表request body   url为login/
     print(f"username: {payload.username}, password: {payload.password}")
     # authenticate()自动调用create_user()时同样的哈希计算
     user = authenticate(request, username=payload.username, password=payload.password)
@@ -33,14 +34,21 @@ def auth_login(request, payload: LoginIn): #这样用payload参数代表request 
     print(type(user))
     if user is not None:
         login(request, user)
+        # 怎么设置cookie 看django-ninja的文档 https://django-ninja.dev/guides/response/temporal_response/
+        # 主要是 response: HttpResponse
+        response.set_cookie("cookie", "delicious") #浏览器还是没有cookie !!!(前端需要设置axios.defaults.withCredentials = true;)
+        # request.session["info"] = {"id": user.id, "username": user.username} #按django-ninja的来
+        # response.set_cookie("info", {"id": user.id, "username": user.username}) #看了眼其他网站的cookie没有把Value设置成对象的，这样前端也不好提取
+        response.set_cookie("username", user.username)
         return {"message": "Login successful", "username": user.username}
     else:
         return {"message": "Invalid credentials"}
 
 @user_login_api.get("/auth_logout/")
-def auth_logout(request):
+def auth_logout(request, response: HttpResponse):
     print(request.user)
     logout(request)
+    response.delete_cookie('username') #然后前端浏览器真的把这个cookie删了
     print(request.user)
     return {"message": "Logged out successfully", "username": request.user.username}
 
