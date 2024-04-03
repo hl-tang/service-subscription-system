@@ -2,18 +2,17 @@
 import { ref } from 'vue';
 import axios from 'axios';
 
-
-let username = ref("");
-username = $cookies.get("username")
-console.log(username);
+const username = ref("");
+username.value = $cookies.get("username")
+console.log(username.value);
 console.log($cookies.get("cookie"));
 
 const logout = async () => {
   axios.get('http://localhost:8000/api/auth_logout/')
     .then(res => {
       console.log("Response Data:", res.data);
-      username = $cookies.get("username");
-      console.log("登出后 " + username);
+      username.value = $cookies.get("username");
+      console.log("登出后 " + username.value);
     })
   // 注意axios异步操作，这样username不会等后端清除session,cookie，直接还是赋值为了当前的username
   // username = $cookies.get("username"); //要么这里赋值成null也是可以的
