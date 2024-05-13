@@ -1,7 +1,13 @@
 from ninja import NinjaAPI, Schema
 from django.contrib.auth.decorators import login_required, permission_required
+from ninja.errors import ValidationError
+from django.http import HttpRequest, HttpResponse
 
 api = NinjaAPI()
+
+# @api.exception_handler(ValidationError)
+# def validation_errors(request, exc):
+#     return HttpResponse("Invalid input", status=422)
 
 @api.get("hello")
 def hello_world(request):

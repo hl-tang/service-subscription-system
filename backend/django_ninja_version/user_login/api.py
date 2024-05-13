@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from ninja import NinjaAPI, Router
 from ninja import Form, Query
 from django.http import HttpRequest, HttpResponse
-from django.core.exceptions import ValidationError
+# from django.core.exceptions import ValidationError
 import hashlib  # 导入哈希库
 
 from django.contrib.auth.models import User
@@ -29,15 +29,15 @@ def auth_register(request, payload: RegisterIn):
 def auth_login(request: HttpRequest, response: HttpResponse, payload: LoginIn): #这样用payload参数代表request body   url为login/
     print(f"username: {payload.username}, password: {payload.password}")
     # authenticate()自动调用create_user()时同样的哈希计算
-    user = authenticate(request, username=payload.username, password=payload.password)
+    user = authenticate(request, username=payload.username, password=payload.password) #就是检查用户名对应的口令
     print(user)
     print(type(user))
     if user is not None:
-        login(request, user)
+        login(request, user) #就是Session表里添加一条记录,同时把SessionID的Cookie发到发起请求的client
         # 怎么设置cookie 看django-ninja的文档 https://django-ninja.dev/guides/response/temporal_response/
         # 主要是 response: HttpResponse
         response.set_cookie("cookie", "delicious") #浏览器还是没有cookie !!!(前端需要设置axios.defaults.withCredentials = true;)
-        # request.session["info"] = {"id": user.id, "username": user.username} #按django-ninja的来
+        # request.session["info"] = {"id": user.id, "username": user.username} #其实login(request, user)内部就是做了session的处理
         # response.set_cookie("info", {"id": user.id, "username": user.username}) #看了眼其他网站的cookie没有把Value设置成对象的，这样前端也不好提取
         response.set_cookie("username", user.username)
         return {"message": "Login successful", "username": user.username}
@@ -47,7 +47,7 @@ def auth_login(request: HttpRequest, response: HttpResponse, payload: LoginIn): 
 @user_login_api.get("/auth_logout/")
 def auth_logout(request, response: HttpResponse):
     print(request.user)
-    logout(request)
+    logout(request) #把login()做的事情抵消了,session表删掉这个用户的session,删掉client的sessionid的cookie
     response.delete_cookie('username') #然后前端浏览器真的把这个cookie删了
     print(request.user)
     return {"message": "Logged out successfully", "username": request.user.username}
